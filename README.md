@@ -26,6 +26,8 @@ On Windows, `hermes-lantern.cmd` uses the Python launcher (`py -3`) and can be r
 - Polls once per second by default. Only committed database messages are visible; this is not token-by-token streaming. Changes to recent messages are shown as updates. Global mode follows all sessions in the selected database.
 - A compact terminal animation and colored message cards help distinguish roles and conversations. Animation and colors are disabled automatically for redirected output.
 
+Chat transcripts and tool output may contain private information. Take care when sharing terminal output, especially in global mode.
+
 ## Development
 
 ```sh
