@@ -36,4 +36,4 @@ Tests use temporary databases, including concurrent WAL writes, multi-session fo
 
 ## Credits
 
-Created at the request of Riko-Neko. Codex implemented the viewer; Hermes contributed Windows environment knowledge and discussion. The startup design was inspired by the Hermes CLI banner. This is an independent community project and is not an official Hermes Agent product.
+Created at the request of Riko-Neko. Codex implemented the viewer. The Hermes agent helped locate the Hermes CLI banner and suggested an animation mechanism; it did not implement the viewer. The startup design was inspired by the Hermes CLI banner. This is an independent community project and is not an official Hermes Agent product.
