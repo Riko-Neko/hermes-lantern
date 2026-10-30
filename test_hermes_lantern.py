@@ -219,6 +219,22 @@ class WatchTests(unittest.TestCase):
         self.assertNotIn("\x1b", text)
         self.assertTrue(all(hw.cell_width(line) <= 43 for line in text.splitlines()))
 
+    def test_message_width_tracks_terminal_resize(self):
+        self.add("user", "窗口宽度测试")
+        args = self.args("--plain")
+        event = next(e for e in hw.Watcher(self.store, args).poll() if e["event"] == "message")
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output), mock.patch.object(hw.shutil, "get_terminal_size") as size:
+            size.return_value = os.terminal_size((80, 24))
+            renderer = hw.Renderer(args)
+            renderer.render(event)
+            size.return_value = os.terminal_size((180, 24))
+            renderer.render(event)
+            size.return_value = os.terminal_size((60, 24))
+            renderer.render(event)
+        borders = [line for line in output.getvalue().splitlines() if line.startswith("╭")]
+        self.assertEqual([hw.cell_width(line) for line in borders], [79, 179, 59])
+
     def test_short_animation_restores_cursor_and_can_be_disabled(self):
         class Terminal(io.StringIO):
             def isatty(self):

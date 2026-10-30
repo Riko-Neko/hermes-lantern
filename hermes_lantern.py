@@ -280,7 +280,7 @@ class Renderer:
 
     def __init__(self, args):
         self.args = args
-        self.width = max(24, min(100, shutil.get_terminal_size((88, 24)).columns - 1))
+        self.width = self.terminal_width()
         requested = not args.plain and args.color != "never" and "NO_COLOR" not in os.environ
         self.color = requested and (args.color == "always" or (sys.stdout.isatty() and os.environ.get("TERM") != "dumb" and enable_windows_ansi()))
 
@@ -288,6 +288,10 @@ class Renderer:
         if not self.color:
             return text
         return f"\x1b[{1 if bold else 0};38;5;{color}m{text}\x1b[0m"
+
+    @staticmethod
+    def terminal_width():
+        return max(24, shutil.get_terminal_size((88, 24)).columns - 1)
 
     def banner(self, path):
         if self.args.jsonl:
@@ -328,6 +332,7 @@ class Renderer:
         if self.args.jsonl:
             print(json.dumps(event, ensure_ascii=False), flush=True)
             return
+        self.width = self.terminal_width()
         if event["event"] in ("waiting", "mode"):
             print(flush=True)
             for line in wrap_lines(event["text"], self.width - 2):
